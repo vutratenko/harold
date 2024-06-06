@@ -1,0 +1,39 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+<p><img title="Harold" alt="a brancing service for R1 staging k8s cluster" width=250px
+  height=auto src="https://vignette.wikia.nocookie.net/fallout/images/0/0f/FO02_NPC_Harold_G.png/revision/latest?cb=20100812023117"></p>
+<h1 id="harold">harold</h1>
+<p>Harold - сервис бранчей для кластера stage k8s R1</p>
+<h2 id="-">Описание</h2>
+<p>Harold - это система управления DEV окружениями для тестовых кластеров k8s. Она позволяет разворачивать сервисы из ветки в любимой SCM, а зависимости подключать из заранее указанного стабильного (stage) namespace&#39;а посредством добавления в deployment&#39;ы DEV namespace&#39;а собственного контролируемого DNS сервера. </p>
+<h2 id="-">Установка</h2>
+<p>Поставляется в Docker контейнерах и развёртывается посредством helm chart&#39;а, находящегося в директории <code>helm/harold</code>. <code>values.yaml</code> у чарта более-менее стандартный и видится достаточно очевидным для описания всех полей. Детали можно найти в комментариях к самому файлу.</p>
+<h2 id="-">Использование</h2>
+<h3 id="harold">harold</h3>
+<p><code>GET /branches</code>
+Возвращает список (list) созданных окружений</p>
+<p><code>POST /branches</code>
+Принимает JSON структуру <code>{&#39;name&#39;: &#39;имя ветки&#39;}</code> для создания неймспейса с таким именем. Если такой неймспейс существует, просто обновляет ему значение <code>last_change_timestamp</code> на <code>now()</code>.</p>
+<p><code>DELETE /branches</code>
+Принимает JSON структуру <code>{&#39;name&#39;: &#39;имя ветки&#39;}</code>, обозначая удаление неймспейса.</p>
+<h3 id="watchman">watchman</h3>
+<p>Не имеет API. Отвечает на DNS запросы. Для своей работы требует добавления структуры, показанной ниже в deployment перед его созданием.</p>
+<pre><code>    <span class="hljs-attribute">spec</span>:
+      <span class="hljs-attribute">dnsPolicy</span>: <span class="hljs-string">"ClusterFirst"</span>
+      <span class="hljs-attribute">dnsConfig</span>:
+        <span class="hljs-attribute">nameservers</span>:
+          - <span class="hljs-number">10.43</span>.<span class="hljs-number">92.229</span> #IP адрес сервиса, стоящего перед pod'ами watchman
+        <span class="hljs-attribute">options</span>:
+          - <span class="hljs-attribute">name</span>: rotate
+</code></pre><h2 id="-">Поддержка</h2>
+<p>За помощью с сервисом можно обращаться на почту vladimir.utratenko@r1.team</p>
+<h2 id="-">Дорожная карта</h2>
+<ul>
+<li>Тесты</li>
+<li>Аутентификация</li>
+</ul>
+<h2 id="contributing">Contributing</h2>
+<p>Проект открыт для доработок. Все желающие приглашаются присоединиться.</p>
+  
+{% endblock %}

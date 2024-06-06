@@ -1,0 +1,8 @@
+harold_url = "http://127.0.0.1:8000"
+namespace = "default"
+services_check_cooldown = 1
+dns_connection_type="udp"
+dns_port=8888
+log_level="INFO"
+http_port=8001
+debug=false

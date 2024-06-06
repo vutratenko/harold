@@ -1,0 +1,196 @@
+openapi: 3.0.0
+info:
+  version: 0.0.3
+  title: Harold - a branching service
+  description: Harold is a branching service for R1 staging k8s cluster
+  contact:
+    email: vladimir.utratenko@r1.team
+    name: Vladimir Utratenko
+
+security:
+  - BasicAuth: []
+
+paths:
+  /branches:
+    get:
+      description: Returns a list of branches 
+      parameters:
+        - name: limit
+          in: query
+          description: Limits the number of items on a page
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Specifies the page number of branches to be displayed
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+    post:
+      description: Creates a new branch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Branch'
+
+      responses:
+        '200':
+          description: Successfully created a new branch
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+    delete:
+      description: Deletes a branch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Branch'
+
+      responses:
+        '200':
+          description: Successfully delete a branch
+
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:   
+                  message:
+                    type: string
+  /branches/{name}:
+    get:
+      description: Obtain information about a branch by its username
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          
+      responses:
+        '200':
+          description: Successfully returned a branch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Branch'
+                
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:           
+                  message:
+                    type: string
+  /branches/{name}/enable:
+    get:
+      description: Obtain information about a branch by its username
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          
+      responses:
+        '200':
+          description: Successfully enabled an environment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BranchStatus'
+                
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:           
+                  message:
+                    type: string
+  /branches/{name}/disable:
+    get:
+      description: Obtain information about a branch by its username
+      parameters:
+        - name: name
+          in: path
+          required: true
+          schema:
+            type: string
+          
+      responses:
+        '200':
+          description: Successfully enabled an environment
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BranchStatus'
+                
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                type: object 
+                properties:           
+                  message:
+                    type: string
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+
+  schemas:
+    BranchStatus:
+      type: object
+      properties:
+        id: 
+          type: integer
+        name:
+          type: string
+        status:
+          type: string
+    Branch:
+      type: object
+      required:
+        - name
+      properties:
+        last_change_timestamp:
+          type: string
+        creation_timestamp:
+          type: string
+        lifetime:
+          type: integer
+        id:
+          type: integer
+        name:
+            type: string
+
+
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/vutratenko/harold/0.0.1

@@ -1,0 +1,7 @@
+db_string="postgresql://:@.:5432/harold"
+port=8000
+debug=false
+pool_timeout=10
+admin_bootswatch_theme=""
+secret_key=''
+branch_namespace_lifetime = 2
